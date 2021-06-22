@@ -1,0 +1,20 @@
+import marcasyjarras.*
+import personas.*
+
+
+test "Requerimientos - Primera parte" {
+	const hofbrau = new MarcaRoja(pais="Alemania", lupulo=10,graduacionReglamentaria=0.064)
+	const jarraHofbrau = new Jarra(capacidad=0.5,marca=hofbrau)
+	
+	const aleman1 = new Aleman(peso=80, nivelDeAguante=10)
+	aleman1.nacionalidad()
+	aleman1.comprar(jarraHofbrau)
+	
+	//verificaciones
+	assert.equals(0.04, jarraHofbrau.contenidoDeAlcohol())
+	assert.equals(0.04, aleman1.totalAlcohol())
+	assert.notThat(aleman1.estaEbria())
+	assert.that(aleman1.leGusta(hofbrau))
+	
+
+}

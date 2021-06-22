@@ -1,0 +1,54 @@
+import marcasyjarras.*
+import personas.*
+import carpas.*
+
+test "test 1" {
+	const checo1 = new Checo(peso=70, nivelDeAguante=5)
+	const corona = new MarcaRubia(lupulo=3, pais="Mexico",graduacion=0.10)
+	const carpaCorona = new Carpa(limiteGente=5, marcaCerveza=corona)
+	const hofbrau = new MarcaRoja(pais="Alemania", lupulo=10,graduacionReglamentaria=0.064)
+	const aleman1 = new Aleman(peso=80, nivelDeAguante=10)
+	const carpaHofbrau = new Carpa(limiteGente=10, marcaCerveza=hofbrau)
+	
+	//persona quiere entrar
+	assert.that(checo1.quiereEntrar(carpaCorona))
+	assert.notThat(checo1.quiereEntrar(carpaHofbrau))
+	//carpa deja ingresar
+	assert.that(carpaCorona.dejaEntrar(checo1))
+	assert.that(carpaCorona.dejaEntrar(aleman1))
+	//persona puede entrar a carpa
+	assert.that(carpaCorona.puedeEntrar(checo1))
+	//persona entra a carpa
+	carpaCorona.entrar(checo1)
+	//persona no quiere entrar & persona no puede entrar
+	assert.notThat(aleman1.quiereEntrar(carpaCorona))
+	assert.notThat(carpaCorona.puedeEntrar(aleman1))
+	//servir jarra a persona
+	carpaCorona.servirJarraA(checo1, 1)
+	//cantidad ebrios empedernidos
+	assert.equals(1,carpaCorona.cantidadEbriosEmpedernidos())
+	//persona es patriota
+	assert.notThat(checo1.esPatriota())
+}
+
+test "test 2"{
+	const mexicano1 = new Persona(peso=80, nivelDeAguante=15,nacionalidad="Mexico")
+	const corona = new MarcaRubia(lupulo=3, pais="Mexico",graduacion=0.10)
+	const carpaCorona = new Carpa(limiteGente=5, marcaCerveza=corona)
+	mexicano1.agregarMarcaPreferida(corona)
+	
+	assert.that(mexicano1.quiereEntrar(carpaCorona))
+	
+	carpaCorona.entrar(mexicano1)
+	carpaCorona.servirJarraA(mexicano1, 1)
+	
+	const checo1 = new Checo(peso=70, nivelDeAguante=5)
+	assert.that(checo1.quiereEntrar(carpaCorona))
+	carpaCorona.entrar(checo1)
+	carpaCorona.servirJarraA(checo1,1)
+	
+	const aleman1 = new Aleman(peso=80, nivelDeAguante=10)
+	assert.that(aleman1.quiereEntrar(carpaCorona))
+	assert.equals(2, carpaCorona.cantidadEbriosEmpedernidos())
+	assert.that(mexicano1.esPatriota())
+}
